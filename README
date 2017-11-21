@@ -1,0 +1,73 @@
+# Copyright (c) 2017 Nikhil Admal/Jaime Marian
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the 'Software'), to deal in
+# the Software without restriction, including without limitation the rights to
+# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+# the Software, and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# 
+# Author: Nikhil Admal
+
+This file describes the COMSOL implementation of a three-dimensional diffuse-interface 
+polycyrstal plasticity developed in the paper:
+
+    Nikhil Chandra Admal, Giacomo Po, Jaime Marian. 
+    “Diffuse-interface polycrystal plasticity: Expressing grain boundaries 
+    as geometrically necessary dislocations.” Materials Theory, 1(1):6, 2017
+
+The boundary-value-problem simulated is for a three-dimensional polycrystal. 
+See the above reference for additional details regarding the model.
+
+This directory consists of the files
+
+    README
+    polycrystal.m
+        cdf.m
+        logcdf.m
+    expressions.m
+        levCiv.m
+    poly_cp.mph
+
+Following are steps to be followed to run the poly_cp.mph:
+
+1) An initial polycrystal with a log-normal distribution of grain sizes is generated using 
+   the 'polycrystal.m' (depends on 'cdf.m' and 'logcdf.m') matlab file. The polycrystal is 
+   outputted as three .txt files: 'orientation1.txt', 'orietation2.txt' and 'orientation3.txt'. These
+   files are subsequently read into COMSOL when executing poly_cp.mph.
+
+2) Run the 'expressions.m' (depends on 'levCiv.m') matlab file which is used to generate two .txt files:
+   a) 'variables.txt' and b) 'pde.txt', which are used as input for variable definitions and weak
+   form pdes in COMSOL v5.2 file 'poly_cp.mph'. 
+
+3) Open the 'poly_cp.mph' COMSOL file. The 'poly_cp.mph' file, in its current form, has the variables 
+   and the pdes already inputted. So, step 2 above may be skipped. Instead, if you intend to make any 
+   changes to the model by altering the expressions.m file, then the new variables.txt and the pde.txt 
+   files are to be included as follows:
+
+   The files variables.txt are uploaded in the tabs (of COMSOL v5.2)
+
+        Component 1 -> Definition -> variables.
+
+   The weak-form pdes in the file 'pde.txt' are pasted into the
+   PHYSICS tab:
+
+        Force Balance       -> Weak Form PDE1
+
+
+   Finally, the files orientation*.txt generated in step 1 are read in the tabs
+
+        Global Definitions -> interpolation 1/2/3
+
+4) Run the poly_cp.mph file.
