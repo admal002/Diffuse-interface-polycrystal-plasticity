@@ -366,7 +366,7 @@ fprintf(fID,lineFormat,[varName ' ' expression ' ' description]);
 %% v
 varName='v';
 description=['total slip rate'];
-expression=[];
+expression=['1e-10[1/s]'];
 for slipID=1:numSlips
     expression=[expression '+abs(v' num2str(slipID) ')'];
     %expression=[expression '+v' num2str(slipID) '^2'];
